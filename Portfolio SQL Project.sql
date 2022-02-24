@@ -51,11 +51,9 @@ Location != 'Upper middle income'
 Group by Location
 order by TotalDeathCount DESC
 
---Global numbers
+--Global cases, deaths, and death percentage numbers by date
 Select date,SUM(new_cases) as total_cases,SUM(cast(new_deaths as int)) as total_deaths,SUM(cast(new_deaths as int))/SUM(new_cases)*100 as DeathPercentage
---,total_deaths,population,(total_deaths/total_cases)*100 as DeathPercentage
 From Portfolio..['Covid Deaths$']
---where Location like '%states%'
 Where continent is not null
 Group by date
 order by 1,2
@@ -76,11 +74,10 @@ Where dea.continent is not null
 AND new_vaccinations is not null
 order by 3
 
--- Looking at Total Population vs Vaccinations
+-- Looking at Total Population vs Vaccinations with a total vaccination rolling count
 Select dea.continent, dea.location,dea.date,dea.population, vac.new_vaccinations
 , SUM(CONVERT(bigint,vac.new_vaccinations)) OVER (Partition by dea.Location Order by dea.Location
 , dea.Date) as Vaccination_Rolling_Count
---, (Vaccination_Rolling_Count/population)*100
 From Portfolio..['Covid Deaths$'] dea 
 Join Portfolio..['Covid Vaccinations$'] vac
 	On dea.location=vac.location

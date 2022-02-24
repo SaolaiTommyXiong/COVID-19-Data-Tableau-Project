@@ -1,16 +1,3 @@
-Select *
-From Portfolio.dbo.['Covid Deaths$']
-Where continent is not null
-Order by 3,4
-
---Select *
---From Portfolio.dbo.['Covid Vaccinations$']
---Order by 3,4
-
-Select Location,date,total_cases,new_cases,total_deaths,population
-from Portfolio..['Covid Deaths$']
-order by 1,2
-
 -- Looking at Total Cases vs Total Deaths
 -- Shows likelihood of dying if you contract Covid in your country
 Select Location,date,total_cases,total_deaths,population,(total_deaths/total_cases)*100 as DeathPercentage

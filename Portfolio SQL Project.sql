@@ -1,27 +1,27 @@
 -- Looking at Total Cases vs Total Deaths
 -- Shows likelihood of dying if you contract Covid in the United States
 Select Location,date,total_cases,total_deaths,population,(total_deaths/total_cases)*100 as DeathPercentage
-from Portfolio..['Covid Deaths$']
-where Location like '%states%'
+From Portfolio..['Covid Deaths$']
+Where Location like '%states%'
 order by 1,2
 
 -- Looking at Total Cases vs Total Deaths
 -- Shows likelihood of dying if you contract Covid in your country
 Select Location,date,total_cases,total_deaths,population,(total_deaths/total_cases)*100 as DeathPercentage
-from Portfolio..['Covid Deaths$']
+From Portfolio..['Covid Deaths$']
 --where Location like '%states%'
 order by 1,2
 
 -- Looking at Total Cases vs Population
 -- Shows what percentage of population got Covid
 Select Location,date,total_cases,population,(total_cases/population)*100 as CasePercentage
-from Portfolio..['Covid Deaths$']
-where Location like '%states%'
+From Portfolio..['Covid Deaths$']
+Where Location like '%states%'
 order by 1,2
 
 -- Looking at countries with highest infection rate compared to population
 Select Location,population,MAX(total_cases) as HighestInfectionCount,MAX((total_cases/population))*100 as PercentPopulationInfected
-from Portfolio..['Covid Deaths$']
+From Portfolio..['Covid Deaths$']
 --where Location like '%states%'
 Group by Location,population
 order by PercentPopulationInfected DESC
@@ -54,7 +54,7 @@ order by TotalDeathCount DESC
 --Global numbers
 Select date,SUM(new_cases) as total_cases,SUM(cast(new_deaths as int)) as total_deaths,SUM(cast(new_deaths as int))/SUM(new_cases)*100 as DeathPercentage
 --,total_deaths,population,(total_deaths/total_cases)*100 as DeathPercentage
-from Portfolio..['Covid Deaths$']
+From Portfolio..['Covid Deaths$']
 --where Location like '%states%'
 Where continent is not null
 Group by date
@@ -62,7 +62,7 @@ order by 1,2
 
 --SUM of Global numbers
 Select SUM(new_cases) as total_cases,SUM(cast(new_deaths as int)) as total_deaths,SUM(cast(new_deaths as int))/SUM(new_cases)*100 as DeathPercentage
-from Portfolio..['Covid Deaths$']
+From Portfolio..['Covid Deaths$']
 Where continent is not null
 order by 1,2
 
@@ -149,5 +149,5 @@ AND new_vaccinations is not null
 -- Creating View example
 Create View PortfolioExample1 as
 Select Location,date,total_cases,total_deaths,population,(total_deaths/total_cases)*100 as DeathPercentage
-from Portfolio..['Covid Deaths$']
-where Location like '%states%'
+From Portfolio..['Covid Deaths$']
+Where Location like '%states%'

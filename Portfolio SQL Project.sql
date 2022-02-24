@@ -40,17 +40,6 @@ Where continent is not null
 Group by continent
 order by TotalDeathCount DESC
 
--- Location for some reason includes invalid location values
-Select Location,MAX(cast(total_deaths as int)) as TotalDeathCount
-From Portfolio..['Covid Deaths$']
-Where continent is null AND
-Location != 'low income' AND
-Location != 'Lower middle income' AND
-Location != 'High income' AND
-Location != 'Upper middle income'
-Group by Location
-order by TotalDeathCount DESC
-
 --Global cases, deaths, and death percentage numbers by date
 Select date,SUM(new_cases) as total_cases,SUM(cast(new_deaths as int)) as total_deaths,SUM(cast(new_deaths as int))/SUM(new_cases)*100 as DeathPercentage
 From Portfolio..['Covid Deaths$']

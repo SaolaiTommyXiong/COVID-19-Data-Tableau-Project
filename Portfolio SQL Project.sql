@@ -1,8 +1,15 @@
 -- Looking at Total Cases vs Total Deaths
--- Shows likelihood of dying if you contract Covid in your country
+-- Shows likelihood of dying if you contract Covid in the United States
 Select Location,date,total_cases,total_deaths,population,(total_deaths/total_cases)*100 as DeathPercentage
 from Portfolio..['Covid Deaths$']
 where Location like '%states%'
+order by 1,2
+
+-- Looking at Total Cases vs Total Deaths
+-- Shows likelihood of dying if you contract Covid in your country
+Select Location,date,total_cases,total_deaths,population,(total_deaths/total_cases)*100 as DeathPercentage
+from Portfolio..['Covid Deaths$']
+--where Location like '%states%'
 order by 1,2
 
 -- Looking at Total Cases vs Population
@@ -11,7 +18,6 @@ Select Location,date,total_cases,population,(total_cases/population)*100 as Case
 from Portfolio..['Covid Deaths$']
 where Location like '%states%'
 order by 1,2
-
 
 -- Looking at countries with highest infection rate compared to population
 Select Location,population,MAX(total_cases) as HighestInfectionCount,MAX((total_cases/population))*100 as PercentPopulationInfected
@@ -45,7 +51,6 @@ Location != 'Upper middle income'
 Group by Location
 order by TotalDeathCount DESC
 
-
 --Global numbers
 Select date,SUM(new_cases) as total_cases,SUM(cast(new_deaths as int)) as total_deaths,SUM(cast(new_deaths as int))/SUM(new_cases)*100 as DeathPercentage
 --,total_deaths,population,(total_deaths/total_cases)*100 as DeathPercentage
@@ -61,9 +66,7 @@ from Portfolio..['Covid Deaths$']
 Where continent is not null
 order by 1,2
 
-
 -- Looking at New Vaccinations by date
-
 Select dea.continent, dea.location,dea.date,dea.population, vac.new_vaccinations
 From Portfolio..['Covid Deaths$'] dea 
 Join Portfolio..['Covid Vaccinations$'] vac
@@ -74,7 +77,6 @@ AND new_vaccinations is not null
 order by 3
 
 -- Looking at Total Population vs Vaccinations
-
 Select dea.continent, dea.location,dea.date,dea.population, vac.new_vaccinations
 , SUM(CONVERT(bigint,vac.new_vaccinations)) OVER (Partition by dea.Location Order by dea.Location
 , dea.Date) as Vaccination_Rolling_Count
@@ -87,10 +89,7 @@ Where dea.continent is not null
 AND new_vaccinations is not null
 order by 2,3
 
-
-
 -- USE CTE
-
 With PopvsVac (continent, Location, Date, Population,New_Vaccinations, Vaccination_Rolling_Count)
 as
 (
@@ -108,11 +107,7 @@ AND new_vaccinations is not null
 Select *, (Vaccination_Rolling_Count/Population)*100
 From PopvsVac
 
-
-
-
 -- TEMP Table
-
 DROP Table if exists #PercentPopulationVaccinated
 Create Table #PercentPopulationVaccinated
 (
@@ -123,9 +118,7 @@ Population numeric,
 New_vaccinations numeric,
 Vaccination_Rolling_Count numeric,
 )
-
 Insert into #PercentPopulationVaccinated
-
 Select dea.continent, dea.location,dea.date,dea.population, vac.new_vaccinations
 , SUM(CONVERT(bigint,vac.new_vaccinations)) OVER (Partition by dea.Location Order by dea.Location
 , dea.Date) as Vaccination_Rolling_Count
@@ -140,9 +133,7 @@ AND new_vaccinations is not null
 Select *, (Vaccination_Rolling_Count/Population)*100
 From #PercentPopulationVaccinated
 
-
 -- Creating View to store data for later visualization
-
 Create View PercentPopulationVaccinated2 as
 Select dea.continent, dea.location,dea.date,dea.population, vac.new_vaccinations
 , SUM(CONVERT(bigint,vac.new_vaccinations)) OVER (Partition by dea.Location Order by dea.Location
@@ -155,9 +146,8 @@ Join Portfolio..['Covid Vaccinations$'] vac
 Where dea.continent is not null
 AND new_vaccinations is not null
 
-
+-- Creating View example
 Create View PortfolioExample1 as
 Select Location,date,total_cases,total_deaths,population,(total_deaths/total_cases)*100 as DeathPercentage
 from Portfolio..['Covid Deaths$']
 where Location like '%states%'
---order by 1,2
